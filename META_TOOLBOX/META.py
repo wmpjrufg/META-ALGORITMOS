@@ -22,6 +22,7 @@
 ################################################################################
 # BIBLIOTECAS NATIVAS PYTHON
 import numpy as np
+import time
 
 ################################################################################
 # BIBLIOTECAS DESENVOLVEDORES GPEE
@@ -106,6 +107,7 @@ def SA_ALGORITHM_0001(OF_FUNCTION, SETUP):
     else:
         pass 
     # Repetition looping
+    INIT = time.time()
     for I_COUNT in range(N_REP):
         # Creating variables in the iterations procedure
         X = np.zeros((N_POP, D)); OF = np.zeros((N_POP, 1)); FIT = np.zeros((N_POP, 1))
@@ -195,6 +197,10 @@ def SA_ALGORITHM_0001(OF_FUNCTION, SETUP):
         BEST_REP.append(BEST_ITER)
         AVERAGE_REP.append(AVERAGE_ITER)
         WORST_REP.append(WORST_ITER)
+        time.sleep(0.1)
+        META_CL.PROGRESSBAR(I_COUNT + 1, N_REP, prefix = 'Progress:', suffix = 'Complete', length = 50)
+    END = time.time()
+    print('Process Time: %.2f' % (END - INIT), 'Seconds', '\n', 'Seconds per repetition: %.2f' % ((END - INIT) / N_REP))
     STATUS_PROCEDURE = META_CL.SUMMARY_ANALYSIS(BEST_REP, N_REP, N_ITER)
     return RESULTS_REP, BEST_REP, AVERAGE_REP, WORST_REP, STATUS_PROCEDURE
 
@@ -275,6 +281,7 @@ def FA_ALGORITHM_0001(OF_FUNCTION, SETUP):
     else:
         pass 
     # Repetition looping    
+    INIT = time.time()
     for I_COUNT in range(N_REP):
         # Creating variables in the iterations procedure
         X = np.zeros((N_POP, D)); OF = np.zeros((N_POP, 1)); FIT = np.zeros((N_POP, 1))
@@ -374,6 +381,10 @@ def FA_ALGORITHM_0001(OF_FUNCTION, SETUP):
         BEST_REP.append(BEST_ITER)
         AVERAGE_REP.append(AVERAGE_ITER)
         WORST_REP.append(WORST_ITER)
+        time.sleep(0.1)
+        META_CL.PROGRESSBAR(I_COUNT + 1, N_REP, prefix = 'Progress:', suffix = 'Complete', length = 50)
+    END = time.time()
+    print('Process Time: %.2f' % (END - INIT), 'Seconds', '\n', 'Seconds per repetition: %.2f' % ((END - INIT) / N_REP))
     STATUS_PROCEDURE = META_CL.SUMMARY_ANALYSIS(BEST_REP, N_REP, N_ITER)
     return RESULTS_REP, BEST_REP, AVERAGE_REP, WORST_REP, STATUS_PROCEDURE
 

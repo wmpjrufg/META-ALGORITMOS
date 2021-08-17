@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    	name = 'METATOOLBOX',
+    	name = 'META_TOOLBOX',
     	version = '0.0.0',
 	url='https://wmpjrufg.github.io/META_TOOLBOX/',
     	license='MIT License',
