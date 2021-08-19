@@ -29,6 +29,7 @@ import time
 import META_TOOLBOX.META_COMMON_LIBRARY as META_CL
 import META_TOOLBOX.META_SA_ALGORITHM_LIBRARY as META_SA
 import META_TOOLBOX.META_FA_ALGORITHM_LIBRARY as META_FA
+from datetime import datetime
 
 # ALGORITMO DE RECOZIMENTO SIMULADO PADRÃO
 def SA_ALGORITHM_0001(OF_FUNCTION, SETUP):
@@ -198,10 +199,13 @@ def SA_ALGORITHM_0001(OF_FUNCTION, SETUP):
         AVERAGE_REP.append(AVERAGE_ITER)
         WORST_REP.append(WORST_ITER)
         time.sleep(0.1)
-        META_CL.PROGRESSBAR(I_COUNT + 1, N_REP, prefix = 'Progress:', suffix = 'Complete', length = 50)
+        META_CL.PROGRESSBAR(I_COUNT + 1, N_REP)
     END = time.time()
     print('Process Time: %.2f' % (END - INIT), 'Seconds', '\n', 'Seconds per repetition: %.2f' % ((END - INIT) / N_REP))
     STATUS_PROCEDURE = META_CL.SUMMARY_ANALYSIS(BEST_REP, N_REP, N_ITER)
+    for P_COUNT in range(N_REP):
+        NAME.append('META_' + 'REP_' + str(P_COUNT) + '_BEST_' + str(P_COUNT) + '_' + str(datetime.now().strftime('%Y%m%d %H%M%S')))
+        META_CL.EXCEL_WRITER_ITERATION(NAME[P_COUNT], D, BEST_REP[P_COUNT])
     return RESULTS_REP, BEST_REP, AVERAGE_REP, WORST_REP, STATUS_PROCEDURE
 
 # ALGORITMO DE COLÔNIA DE VAGALUME PADRÃO
@@ -276,6 +280,7 @@ def FA_ALGORITHM_0001(OF_FUNCTION, SETUP):
     BEST_REP = []
     WORST_REP = []
     AVERAGE_REP = []
+    NAME = []
     if NULL_DIC == None:
         NULL_DIC = []
     else:
@@ -382,10 +387,13 @@ def FA_ALGORITHM_0001(OF_FUNCTION, SETUP):
         AVERAGE_REP.append(AVERAGE_ITER)
         WORST_REP.append(WORST_ITER)
         time.sleep(0.1)
-        META_CL.PROGRESSBAR(I_COUNT + 1, N_REP, prefix = 'Progress:', suffix = 'Complete', length = 50)
+        META_CL.PROGRESSBAR(I_COUNT + 1, N_REP)
     END = time.time()
-    print('Process Time: %.2f' % (END - INIT), 'Seconds', '\n', 'Seconds per repetition: %.2f' % ((END - INIT) / N_REP))
     STATUS_PROCEDURE = META_CL.SUMMARY_ANALYSIS(BEST_REP, N_REP, N_ITER)
+    print('Process Time: %.2f' % (END - INIT), 'Seconds', '\n', 'Seconds per repetition: %.2f' % ((END - INIT) / N_REP))
+    for P_COUNT in range(N_REP):
+        NAME.append('META_' + 'REP_' + str(P_COUNT) + '_BEST_' + str(P_COUNT) + '_' + str(datetime.now().strftime('%Y%m%d %H%M%S')))
+        META_CL.EXCEL_WRITER_ITERATION(NAME[P_COUNT], D, BEST_REP[P_COUNT])
     return RESULTS_REP, BEST_REP, AVERAGE_REP, WORST_REP, STATUS_PROCEDURE
 
 # ALGORITMO DE COLÔNIA DE VAGALUME COM GÊNERO

@@ -22,6 +22,7 @@
 ################################################################################
 # BIBLIOTECAS NATIVAS PYTHON
 import numpy as np
+import pandas as pd
 
 ################################################################################
 # BIBLIOTECAS DESENVOLVEDORES GPEE
@@ -154,26 +155,64 @@ def SUMMARY_ANALYSIS(BEST_REP, N_REP, N_ITER):
     return STATUS_PROCEDURE
 
 # PLOTAGEM DA BARRA DE PROGRESSO
-def PROGRESSBAR(I_COUNT, TOTAL, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
+def PROGRESSBAR(I_COUNT, TOTAL, PREFIX = 'Progress:', SUFFIX = 'Complete', DECIMALS = 1, LENGTH = 50, FILL = '█', PRINT_END = "\r"):
     """
-    Call in a loop to create terminal progress bar
-    @params:
-        I_COUNT   - Required  : current iteration (Int)
-        TOTAL       - Required  : total iterations (Int)
-        prefix      - Optional  : prefix string (Str)
-        suffix      - Optional  : suffix string (Str)
-        decimals    - Optional  : positive number of decimals in percent complete (Int)
-        length      - Optional  : character length of bar (Int)
-        fill        - Optional  : bar fill character (Str)
-        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    This function create terminal progress bar
+    
+    Input:
+    I_COUNT    | Current iteration (required)                     | Integer
+    TOTAL      | Total iterations (required)                      | Integer
+    PREFIX     | Prefix string                                    | String
+    SUFFIX     | Suffix string                                    | String
+    DECIMALS   | Positive number of decimals in percent complete  | Integer
+    LENGTH     | Character length of bar                          | Integer
+    FILL       | Bar fill character                               | String
+    PRINT_END  | End character (e.g. "\r", "\r\n")                | String
+    
+    Output:
+    N/A
     """
-    percent = ("{0:." + str(decimals) + "f}").format(100 * (I_COUNT / float(TOTAL)))
-    filledLength = int(length * I_COUNT // TOTAL)
-    bar = fill * filledLength + '-' * (length - filledLength)
-    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
+    PERCENT = ("{0:." + str(DECIMALS) + "f}").format(100 * (I_COUNT / float(TOTAL)))
+    FILLED_LENGTH = int(LENGTH * I_COUNT // TOTAL)
+    BAR = FILL * FILLED_LENGTH + '-' * (LENGTH - FILLED_LENGTH)
+    print(f'\r{PREFIX} |{BAR}| {PERCENT}% {SUFFIX}', end = PRINT_END)
     # Print New Line on Complete
     if I_COUNT == TOTAL: 
         print()
+
+# SALVA ARQUIVO EM EXCEL
+def EXCEL_WRITER_ITERATION(NAME, D, DATASET):
+    """
+    This function create output Excel files
+    
+    Input:
+    NAME       | Filename                                         | String
+    D          | Problem dimension                                | Integer
+    DATASET    | Best results                                     | Py Numpy array
+    
+    Output:
+    Save xls file in current directory
+    """
+    # Individual results
+    X = DATASET['X_POSITION']
+    COLUMNS = []
+    for I_COUNT in range(D):
+        COLUMNS_X = 'X_' + str(I_COUNT)
+        COLUMNS.append(COLUMNS_X)
+    DATA1 = pd.DataFrame(X, columns = COLUMNS)
+    OF = DATASET['OF']
+    DATA2 = pd.DataFrame(OF, columns = ['OF'])
+    FIT = DATASET['FIT']
+    DATA3 = pd.DataFrame(FIT, columns = ['FIT'])
+    NEOF = DATASET['NEOF']
+    DATA4 = pd.DataFrame(NEOF, columns = ['NEOF'])
+    FRAME = [DATA1, DATA2, DATA3, DATA4]
+    DATA = pd.concat(FRAME, axis = 1)
+    NAME += '.xlsx' 
+    print(NAME)
+    WRITER = pd.ExcelWriter(NAME, engine = 'xlsxwriter')
+    DATA.to_excel(WRITER, sheet_name = 'Sheet1')
+    WRITER.save()
 
 #   /$$$$$$  /$$$$$$$  /$$$$$$$$ /$$$$$$$$       /$$$$$$$$ /$$$$$$$$  /$$$$$$  /$$   /$$ /$$   /$$  /$$$$$$  /$$        /$$$$$$   /$$$$$$  /$$$$$$ /$$$$$$$$  /$$$$$$ 
 #  /$$__  $$| $$__  $$| $$_____/| $$_____/      |__  $$__/| $$_____/ /$$__  $$| $$  | $$| $$$ | $$ /$$__  $$| $$       /$$__  $$ /$$__  $$|_  $$_/| $$_____/ /$$__  $$
