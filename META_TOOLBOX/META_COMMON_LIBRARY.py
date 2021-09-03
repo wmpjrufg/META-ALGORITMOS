@@ -183,12 +183,12 @@ def PROGRESSBAR(I_COUNT, TOTAL, PREFIX = 'Progress:', SUFFIX = 'Complete', DECIM
 # SALVA ARQUIVO EM EXCEL
 def EXCEL_WRITER_ITERATION(NAME, D, DATASET):
     """
-    This function create output Excel files
+    This function create output Excel files by iteration.
     
     Input:
     NAME       | Filename                                         | String
     D          | Problem dimension                                | Integer
-    DATASET    | Best results                                     | Py Numpy array
+    DATASET    | Best results I repetition                        | Py Numpy array
     
     Output:
     Save xls file in current directory
@@ -205,6 +205,49 @@ def EXCEL_WRITER_ITERATION(NAME, D, DATASET):
     FIT = DATASET['FIT']
     DATA3 = pd.DataFrame(FIT, columns = ['FIT'])
     NEOF = DATASET['NEOF']
+    DATA4 = pd.DataFrame(NEOF, columns = ['NEOF'])
+    FRAME = [DATA1, DATA2, DATA3, DATA4]
+    DATA = pd.concat(FRAME, axis = 1)
+    NAME += '.xlsx' 
+    print(NAME)
+    WRITER = pd.ExcelWriter(NAME, engine = 'xlsxwriter')
+    DATA.to_excel(WRITER, sheet_name = 'Sheet1')
+    WRITER.save()
+
+# RESUMO DOS DADOS EM EXCEL
+def EXCEL_PROCESS_RESUME(NAME, D, DATASET, N_ITER, N_REP):
+    """
+    This function create output Excel files complete process.
+
+    Input:
+    NAME       | Filename                                         | String
+    D          | Problem dimension                                | Integer
+    DATASET    | Best results I repetition                        | Py Numpy array
+    N_REP      | Number of repetitions                            | Integer
+    N_ITER     | Number of iterations                             | Integer
+
+    Output:
+    Save xls file in current directory
+    """
+    # Resume process in arrays
+    X = np.zeros((N_REP, D))
+    OF = np.zeros((N_REP, 1))
+    FIT = np.zeros((N_REP, 1))
+    NEOF = np.zeros((N_REP, 1))
+    for I_COUNT in range(N_REP):
+        X_I = DATASET[I_COUNT]['X_POSITION'][N_ITER]
+        X[I_COUNT, :] = X_I
+        OF[I_COUNT, :] = DATASET[I_COUNT]['OF'][N_ITER]
+        FIT[I_COUNT, :] = DATASET[I_COUNT]['FIT'][N_ITER]
+        NEOF[I_COUNT, :] = DATASET[I_COUNT]['NEOF'][N_ITER]
+    # Excel save
+    COLUMNS = []
+    for I_COUNT in range(D):
+        COLUMNS_X = 'X_' + str(I_COUNT)
+        COLUMNS.append(COLUMNS_X)
+    DATA1 = pd.DataFrame(X, columns = COLUMNS)
+    DATA2 = pd.DataFrame(OF, columns = ['OF'])
+    DATA3 = pd.DataFrame(FIT, columns = ['FIT'])
     DATA4 = pd.DataFrame(NEOF, columns = ['NEOF'])
     FRAME = [DATA1, DATA2, DATA3, DATA4]
     DATA = pd.concat(FRAME, axis = 1)

@@ -103,6 +103,7 @@ def SA_ALGORITHM_0001(OF_FUNCTION, SETUP):
     BEST_REP = []
     WORST_REP = []
     AVERAGE_REP = []
+    NAME = []
     if NULL_DIC == None:
         NULL_DIC = []
     else:
@@ -204,8 +205,10 @@ def SA_ALGORITHM_0001(OF_FUNCTION, SETUP):
     print('Process Time: %.2f' % (END - INIT), 'Seconds', '\n', 'Seconds per repetition: %.2f' % ((END - INIT) / N_REP))
     STATUS_PROCEDURE = META_CL.SUMMARY_ANALYSIS(BEST_REP, N_REP, N_ITER)
     for P_COUNT in range(N_REP):
-        NAME.append('META_' + 'REP_' + str(P_COUNT) + '_BEST_' + str(P_COUNT) + '_' + str(datetime.now().strftime('%Y%m%d %H%M%S')))
+        NAME.append('META_SA001_' + 'REP_' + str(P_COUNT) + '_BEST_' + str(P_COUNT) + '_' + str(datetime.now().strftime('%Y%m%d %H%M%S')))
         META_CL.EXCEL_WRITER_ITERATION(NAME[P_COUNT], D, BEST_REP[P_COUNT])
+    NAME_RESUME = 'META_SA001_' + 'RESUME' + '_' + str(datetime.now().strftime('%Y%m%d %H%M%S'))
+    META_CL.EXCEL_PROCESS_RESUME(NAME_RESUME, D, BEST_REP, N_ITER, N_REP)    
     return RESULTS_REP, BEST_REP, AVERAGE_REP, WORST_REP, STATUS_PROCEDURE
 
 # ALGORITMO DE COLÔNIA DE VAGALUME PADRÃO
@@ -392,8 +395,10 @@ def FA_ALGORITHM_0001(OF_FUNCTION, SETUP):
     STATUS_PROCEDURE = META_CL.SUMMARY_ANALYSIS(BEST_REP, N_REP, N_ITER)
     print('Process Time: %.2f' % (END - INIT), 'Seconds', '\n', 'Seconds per repetition: %.2f' % ((END - INIT) / N_REP))
     for P_COUNT in range(N_REP):
-        NAME.append('META_' + 'REP_' + str(P_COUNT) + '_BEST_' + str(P_COUNT) + '_' + str(datetime.now().strftime('%Y%m%d %H%M%S')))
+        NAME.append('META_FA001_' + 'REP_' + str(P_COUNT) + '_BEST_' + str(P_COUNT) + '_' + str(datetime.now().strftime('%Y%m%d %H%M%S')))
         META_CL.EXCEL_WRITER_ITERATION(NAME[P_COUNT], D, BEST_REP[P_COUNT])
+    NAME_RESUME = 'META_FA001_' + 'RESUME' + '_' + str(datetime.now().strftime('%Y%m%d %H%M%S'))
+    META_CL.EXCEL_PROCESS_RESUME(NAME_RESUME, D, BEST_REP, N_ITER, N_REP)
     return RESULTS_REP, BEST_REP, AVERAGE_REP, WORST_REP, STATUS_PROCEDURE
 
 # ALGORITMO DE COLÔNIA DE VAGALUME COM GÊNERO

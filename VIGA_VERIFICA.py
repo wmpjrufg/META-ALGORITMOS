@@ -1,17 +1,24 @@
-#!/usr/bin/env python
-# coding: utf-8
+################################################################################
+# UNIVERSIDADE FEDERAL DE CATALÃO (UFCAT)
+# WANDERLEI MALAQUIAS PEREIRA JUNIOR,                  ENG. CIVIL / PROF (UFCAT)
+# MATHEUS HENRIQUE MORATO DE MORAES                    ENG. CIVIL / PROF (UFCAT)
+################################################################################
 
-# In[1]:
+################################################################################
+# DESCRIÇÃO ALGORITMO:
+# BIBLIOTECA DE CÁLCULO DE VIGAS PROTENDIDAS DESENVOLVIDA PELO GRUPO DE PESQUISA 
+# E ESTUDOS EM ENGENHARIA (GPEE)
+################################################################################
 
 
-# Célula de instalação (**Não é necessário executar novamente quando precisar mudar os dados**)
+################################################################################
+# BIBLIOTECAS NATIVAS PYTHON
 import numpy as np
+
+################################################################################
+# BIBLIOTECAS DESENVOLVEDORES GPEE
 from VIGA_PREPRO import *
 from PERDAS import *
-
-
-# In[2]:
-
 
 def VERIFICACAO_VIGA(VIGA):
     # Atribuição de dados
@@ -66,7 +73,7 @@ def VERIFICACAO_VIGA(VIGA):
     G = []
     # Determinação das propriedades da seção tipo I
     [A_C, I_C, Y_SUP, Y_INF, W_SUP, W_INF] = PROP_GEOMETRICA_I(H, B_FS, B_FI, B_W, H_FS, H_FI, H_SI, H_II)
-    """
+    #"""
     print('Propriedades da seção transversal tipo I com abas inclinadas')
     print('A_C:   ', '%+10.5e' % A_C, 'm²')
     print('I_C:   ', '%+10.5e' % I_C, 'm^4')
@@ -76,12 +83,12 @@ def VERIFICACAO_VIGA(VIGA):
     print('W_INF: ', '%+10.5e' % W_INF, 'm³')
     print('E_P:   ', '%+10.5e' % E_P, 'm')
     print('\n')
-    """
+    #"""
     # Propriedades do material em todos as etapas construtivas
     F_CKJ = []; F_CTMJ = []; F_CTKINFJ = []; F_CTKSUPJ = []; E_CIJ = []; E_CSJ = [];
-    """
+    #"""
     print('Propriedades do material')
-    """
+    #"""
     for I_COUNT in range(len(TEMPO_CONC)):
         TEMPO = TEMPO_CONC[I_COUNT]
         [F_CKJJ, F_CTM, F_CTKINF, F_CTKSUP, E_CI, E_CS] = PROP_MATERIAL(F_CK, TEMPO, CIMENTO, AGREGADO)
@@ -297,10 +304,10 @@ def VERIFICACAO_VIGA(VIGA):
     """
     # Determinação das propriedades no Estádio I
     ALPHA_MOD = E_SCP / E_CSJ[5]
-    A_CI, X_I, I_I = GEOMETRIC_PROPERTIES_STATE_I(H, B_FS, B_W, H_FS, A_SCP, ALPHA_MOD, D)
-    M_R = M_R_BENDING_MOMENT('I', F_CTMJ[5], H, X_I, I_I, P_IINF, A_CI, W_INF, E_P)
+    A_CI, X_I, I_I = PROP_GEOMETRICA_ESTADIO_I(H, B_FS, B_W, H_FS, A_SCP, ALPHA_MOD, D)
+    M_R = MOMENTO_RESISTENTE('I', F_CTMJ[5], H, X_I, I_I, P_IINF, A_CI, W_INF, E_P)
     # Determinação das propriedades no Estádio II
-    X_II, I_II = GEOMETRIC_PROPERTIES_STATE_II(H, B_FS, B_W, H_FS, A_SCP, 0, ALPHA_MOD, D, 0)
+    X_II, I_II = PROP_GEOMETRICA_ESTADIO_II(H, B_FS, B_W, H_FS, A_SCP, 0, ALPHA_MOD, D, 0)
     """
     print("Verificação da flecha")
     print("Propriedades no Estádio I")
@@ -322,7 +329,7 @@ def VERIFICACAO_VIGA(VIGA):
     """
     # Inércia e rigidez equivalente da peça
     if M_SER > M_R:
-        I_M = BRANSON_INERTIA(M_R, M_SER, I_I, I_II)
+        I_M = INERCIA_BRANSON(M_R, M_SER, I_I, I_II)
         I_CNOVO = I_M
         #print('Peça deverá ser verificada no Estádio II')
     else:
